@@ -21,8 +21,13 @@ class SoundManager:
         self.current_index = 0
         self.last_input_time = 0
         self.volume = 1.0
+        self.debounce_time = 0.1
         self.sounds_dir = resource_path(sounds_dir)
         self.load_sounds()
+
+    def set_debounce_time(self, seconds):
+        self.debounce_time = max(0.01, min(1.0, seconds))
+        # print(f"Debounce time set to: {self.debounce_time}")
 
     def load_sounds(self):
         # Load sounds 0.wav through 11.wav
@@ -40,7 +45,7 @@ class SoundManager:
     def play_next(self):
         current_time = time.time()
         
-        if current_time - self.last_input_time < 0.042:
+        if current_time - self.last_input_time < self.debounce_time:
             return
 
         # Check for timeout (2 seconds)

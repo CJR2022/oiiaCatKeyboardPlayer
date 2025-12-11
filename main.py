@@ -12,7 +12,7 @@ class App(customtkinter.CTk):
 
         # Window setup
         self.title("OIIA CAT Keyboard Sound Player")
-        self.geometry("400x300")
+        self.geometry("400x450")
         self.resizable(False, False)
 
         # Initialize logic
@@ -22,7 +22,7 @@ class App(customtkinter.CTk):
 
         # Grid layout
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        self.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
         # Title Label
         self.title_label = customtkinter.CTkLabel(self, text="OIIA CAT Keyboard Sound Player", font=customtkinter.CTkFont(size=20, weight="bold"))
@@ -43,6 +43,15 @@ class App(customtkinter.CTk):
         self.slider.set(1.0)
         self.slider.grid(row=3, column=0, padx=20, pady=(0, 20))
 
+        # Debounce Label
+        self.debounce_label = customtkinter.CTkLabel(self, text="Debounce Time: 0.10s")
+        self.debounce_label.grid(row=4, column=0, padx=20, pady=(10, 0))
+
+        # Debounce Slider
+        self.debounce_slider = customtkinter.CTkSlider(self, from_=0.01, to=1.0, command=self.change_debounce)
+        self.debounce_slider.set(0.1)
+        self.debounce_slider.grid(row=5, column=0, padx=20, pady=(0, 20))
+
         # Protocol for closing
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -55,6 +64,10 @@ class App(customtkinter.CTk):
     def change_volume(self, value):
         self.sound_manager.set_volume(value)
         self.volume_label.configure(text=f"Volume: {int(value * 100)}%")
+
+    def change_debounce(self, value):
+        self.sound_manager.set_debounce_time(value)
+        self.debounce_label.configure(text=f"Debounce Time: {value:.2f}s")
 
     def on_closing(self):
         self.keyboard_handler.stop()
