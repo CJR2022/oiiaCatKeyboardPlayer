@@ -40,8 +40,7 @@ class SoundManager:
     def play_next(self):
         current_time = time.time()
         
-        # Debounce: Ignore inputs if less than 0.1s has passed since last sound
-        if current_time - self.last_input_time < 0.06:
+        if current_time - self.last_input_time < 0.042:
             return
 
         # Check for timeout (2 seconds)
